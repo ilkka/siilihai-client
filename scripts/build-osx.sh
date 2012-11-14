@@ -46,17 +46,17 @@ mkdir "$CLIENTBUILDDIR" || die "Unable to create directory $CLIENTBUILDDIR"
 (
 	status "Building libsiilihai in $LIBBUILDDIR"
 	cd "$LIBBUILDDIR"
-	qmake CONFIG-=debug CONFIG+=release "$LIBSRCDIR" >> "$LOGFILE" 2>&1 \
+	qmake -r -spec macx-g++ CONFIG-=debug CONFIG+=release CONFIG+=x86_64 "$LIBSRCDIR"/libsiilihai.pro >> "$LOGFILE" 2>&1 \
 		&& make >> "$LOGFILE" 2>&1
 ) || die "Building libsiilihai failed, see $LOGFILE"
 
 (
 	status "Building siilihai-client in $CLIENTBUILDDIR"
 	cd "$CLIENTBUILDDIR"
-	qmake CONFIG-=debug CONFIG+=release \
+	qmake -r -spec macx-g++ CONFIG-=debug CONFIG+=release CONFIG+=x86_64 \
 		LIBS+=-L"$LIBBUILDDIR/src" \
 		INCLUDEPATH+="$LIBSRCDIR/src" \
-		"$CLIENTSRCDIR" >> "$LOGFILE" 2>&1 \
+		"$CLIENTSRCDIR"/siilihai-client.pro >> "$LOGFILE" 2>&1 \
 		&& make >> "$LOGFILE" 2>&1
 ) || die "Building siilihai-client failed, see $LOGFILE"
 
